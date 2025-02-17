@@ -1,13 +1,17 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, defineProps, defineEmits } from 'vue';
 import CalendarList from '../calendar/CalendarList.vue';
-const { onChoiceDay, activeDay, daysInMonth, currentDayOfMonth, currentDayOfWeek } = defineProps({
+
+const props = defineProps({
+  searchValue: String, // Значение передаётся из родителя
   currentDayOfWeek: Number,
   currentDayOfMonth: Number,
   activeDay: Number,
   daysInMonth: Number,
   onChoiceDay: Function,
 });
+
+const emit = defineEmits(['update:searchValue']); // Добавляем emit для обновления `searchValue`
 const inputVisible = ref(false);
 </script>
 
@@ -26,6 +30,8 @@ const inputVisible = ref(false);
         >
           <input
             v-if="inputVisible"
+            :value="props.searchValue"
+            @input="emit('update:searchValue', $event.target.value)"
             class="w-52 p-2 rounded-xl border border-gray-300 outline-none"
             type="text"
             placeholder="Поиск посещения..."
@@ -42,11 +48,11 @@ const inputVisible = ref(false);
     </div>
     <div class="flex items-center overflow-x-auto">
       <CalendarList
-        :onChoiceDay="onChoiceDay"
-        :activeDay="activeDay"
-        :daysInMonth="daysInMonth"
-        :currentDayOfMonth="currentDayOfMonth"
-        :currentDayOfWeek="currentDayOfWeek"
+        :onChoiceDay="props.onChoiceDay"
+        :activeDay="props.activeDay"
+        :daysInMonth="props.daysInMonth"
+        :currentDayOfMonth="props.currentDayOfMonth"
+        :currentDayOfWeek="props.currentDayOfWeek"
       />
     </div>
   </div>

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
 import Header from '../../components/header/Header.vue';
 import VisitList from '../../components/visitList/VisitList.vue';
@@ -9,6 +9,7 @@ const activeDay = ref(0);
 const currentDate = ref(new Date());
 const currentDayOfWeek = ref(currentDate.value.getDay());
 const currentDayOfMonth = ref(currentDate.value.getDate());
+const searchValue = ref('');
 const daysInMonth = ref(
   new Date(currentDate.value.getFullYear(), currentDate.value.getMonth() + 1, 0).getDate(),
 );
@@ -50,11 +51,19 @@ const fetchVisits = async () => {
   }
 };
 
+const filteredItems = computed(() =>
+  items.value.filter((item) =>
+    item.fullName.toLowerCase().includes(searchValue.value.toLowerCase()),
+  ),
+);
+
 onMounted(fetchVisits);
 </script>
 
 <template>
   <Header
+    :searchValue="searchValue"
+    @update:searchValue="searchValue = $event"
     :currentDayOfWeek="currentDayOfWeek"
     :currentDayOfMonth="currentDayOfMonth"
     :activeDay="activeDay"
@@ -62,6 +71,6 @@ onMounted(fetchVisits);
     :onChoiceDay="onChoiceDay"
   />
   <hr class="w-[100%] mb-8 border-[#ECECEC]" />
-  <VisitList :items="items.sort((a, b) => a.arrivalTime - b.arrivalTime)" />
+  <VisitList :items="filteredItems" />
   <AddVisitButton />
 </template>
