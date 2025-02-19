@@ -5,10 +5,14 @@ import { createPinia } from 'pinia';
 import { createRouter, createWebHistory } from 'vue-router';
 import PrimeVue from 'primevue/config';
 import Aura from '@primevue/themes/aura';
+//@ts-ignore
 import Home from './pages/home/Home.vue';
+//@ts-ignore
 import AddVisit from './pages/addVisit/AddVisit.vue';
+//@ts-ignore
 import PatientCard from './pages/patientCard/PatientCard.vue';
 import App from './App.vue';
+//@ts-ignore
 import FormTooth from './pages/formTooth/FormTooth.vue';
 
 const app = createApp(App);
